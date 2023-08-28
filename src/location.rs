@@ -13,6 +13,9 @@ use crate::util::EnsureOdd;
 const SELECTION_BUTTON: xproto::Button = 1;
 const GRAB_MASK: u16 = (xproto::EVENT_MASK_BUTTON_PRESS | xproto::EVENT_MASK_POINTER_MOTION) as u16;
 
+// Right mouse button
+const RIGHT_BUTTON: xproto::Button = 3;
+
 // Exclusively grabs the pointer so we get all its events
 fn grab_pointer(conn: &Connection, root: u32, cursor: u32) -> Result<()> {
     let reply = xproto::grab_pointer(
@@ -193,6 +196,9 @@ pub fn wait_for_location(
                             )?;
 
                             break Some(pixels[0]);
+                        }
+                        RIGHT_BUTTON => {
+                            return Ok(None);
                         }
                         _ => {}
                     }
